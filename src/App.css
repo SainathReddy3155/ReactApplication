@@ -1,0 +1,62 @@
+.totalorderscard{
+  height: 100px;
+  margin: 45px 0px 0px 45px;
+}
+
+.totalorderscardtext{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.torderstext{
+  margin: 0px;
+}
+.torderskpicount{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin:17px 0px;
+  font-size: 25px;
+}
+.navtablinks{
+  text-decoration: none;
+  color: black;
+}
+.notificationssetting{
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.generalsetting{
+  display: flex;
+  justify-content: center;
+}
+.profileimage{
+  display: flex;
+    width: 200px;
+    border-radius: 50%;
+}
+.userdetails{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-top: 35px;
+}
+.changepasswordsetting{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.userdetailsjob .userdetailsdob .userdetailslocation{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-top: 35px;
+}
+.highcharts-credits{
+  display: none;
+}
+/* .passwordalerts{
+  width:450px;
+  
+} */
