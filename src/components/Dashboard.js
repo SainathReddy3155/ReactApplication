@@ -204,6 +204,10 @@ const productsapi=async(e)=>{
   const res=await api.get('/api/getproducts/')
   .then((response)=>{
     console.log(response.data)
+    if(response.data.length<0){
+      var data="No data"
+      setUserDataRows(data)
+    }
     setUserDataRows(response.data)
   })
 }
