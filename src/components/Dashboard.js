@@ -51,6 +51,18 @@ function Dashboard(reduxsetusername) {
     { field: 'id', headerName: 'ID', width: 70 },
     { field: 'product_id', headerName: 'Product ID', width: 130 },
     { field: 'product_name', headerName: 'Product Name', width: 130 },
+    {field: 'product_image', headerName: 'Product Image', width: 130 ,
+      renderCell:(params)=>{
+      return(
+        <a target="_blank"><img
+        src={params.value || 'https://www.shutterstock.com/image-vector/vector-flat-illustration-grayscale-avatar-600nw-2264922221.jpg'}
+        alt="Product"
+        style={{ width: 50, height: 50, borderRadius: "50%" }}
+      />
+      </a>
+    )
+      }
+    },
     { field: 'cost', headerName: '$ Cost', width: 130 },
 
     {
@@ -63,15 +75,6 @@ function Dashboard(reduxsetusername) {
       headerName: 'Status',
       width: 90,
     },
-    // {
-    //   field: 'address',
-    //   headerName: 'address',
-    //   description: 'This column has a value getter and is not sortable.',
-    //   sortable: false,
-    //   width: 160,
-    //   valueGetter: (value, row) => `${row.address.street || ''} , ${row.address.city || ''}`,
-    // },
-    
     {
       field:'actions',
       headerName:'Actions',
@@ -110,6 +113,7 @@ function Dashboard(reduxsetusername) {
   const[snackbaropen,setSnackbaropen]=useState(true)
   const [addproductdata,setAddProductdata]=useState({
     product_name:'',
+    product_image:null,
     cost:'',
     rating:'',
     status:''
@@ -138,6 +142,18 @@ function Dashboard(reduxsetusername) {
   // const editdialogOpen=()=>{
   //   setEditdilog(true)
   // }
+
+  const [preview, setPreview] = useState(null);
+
+  const onhandleChangeImage=(e)=>{
+      const file=e.target.files[0];
+      if(file){
+        setAddProductdata({...addproductdata,product_image:file})
+        setPreview(URL.createObjectURL(file))
+      }
+
+  }
+
   const editdialogClose = () => {
     setEditdilog(false);
   };
@@ -161,6 +177,7 @@ const addproductdialogClose=()=>{
     setAddProductdata(
       {
       product_name:'',
+      product_image:null,
       cost:'',
       rating:'',
       status:''
@@ -201,15 +218,12 @@ const addproductdialogClose=()=>{
 // productsapi api 
 
 const productsapi=async(e)=>{
-  const res=await api.get('/api/getproducts/')
-  .then((response)=>{
-    console.log(response.data)
-    if(response.data.length<0){
-      var data="No data"
-      setUserDataRows(data)
-    }
-    setUserDataRows(response.data)
-  })
+  try {
+    const res = await api.get('/api/getproducts/');
+    setUserDataRows(res.data.length > 0 ? res.data : []);
+  } catch (error) {
+    console.error("Error fetching products:", error);
+  }
 }
 
 
@@ -220,15 +234,27 @@ const productsapi=async(e)=>{
   setAddProductdata({...addproductdata,[e.target.name]:e.target.value})
  }
 
+//  Ensure you're using FormData if you're sending an image:
+
+ 
+
  const addproductFunction=async (e)=>{
   e.preventDefault();
+
+  const formdata= new FormData();
+  formdata.append("product_name",addproductdata.product_name);
+  formdata.append("product_image",addproductdata.product_image);
+  formdata.append('cost',addproductdata.cost);
+  formdata.append('rating',addproductdata.rating);
+  formdata.append('status',addproductdata.status);
+
+
+
+
   try{
-    const res=await api.post('/api/addproduct/',{
-      product_name:addproductdata['product_name'],
-      cost:addproductdata['cost'],
-      rating:addproductdata['rating'],
-      status:addproductdata['status'],
-    })
+    const res=await api.post('/api/addproduct/',formdata,{
+      headers: { "Content-Type": "multipart/form-data" },
+    });
     console.log("res:",res)
     if(res.status===200){
       // alert("success")
@@ -246,6 +272,11 @@ const productsapi=async(e)=>{
   console.log(error)
 }
  }
+
+
+
+
+
 
   const userkpiapi=async()=>{
         try{
@@ -434,6 +465,25 @@ const productsapi=async(e)=>{
             onChange={addproductfunChange}
            
           />
+
+            {/* Image adding */}
+
+            <TextField accept='image/*' 
+            type="file" 
+            id='product_image'
+            autoFocus
+            required
+            onChange={onhandleChangeImage}
+            />
+
+            {/* <label htmlFor="product-image">
+            <Button variant="contained" component="span" color="primary" style={{ marginTop: "10px" }}>
+            Choose Image
+            </Button>
+            </label> */}
+
+            {/* Image ending */}
+
         </DialogContent>
         <DialogActions>
           <Button onClick={addproductdialogClose}>Cancel</Button>
