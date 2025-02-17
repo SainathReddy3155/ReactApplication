@@ -1,4 +1,4 @@
-import React, { useEffect,useState } from 'react'
+import React, { useEffect,useState,useContext,createContext } from 'react'
 // import Button from '@mui/material/Button';
 import {Link, Navigate, useNavigate} from 'react-router-dom';
 
@@ -31,6 +31,8 @@ import axios from 'axios';
 import { connect } from 'react-redux';
 import FormControlLabel from '@mui/material/FormControlLabel';
 import FormControl from '@mui/material/FormControl';
+import Settings from './Settings';
+
 function Dashboard(reduxsetusername) {
 
   
@@ -50,7 +52,17 @@ function Dashboard(reduxsetusername) {
   const columns = [
     { field: 'id', headerName: 'ID', width: 70 },
     { field: 'product_id', headerName: 'Product ID', width: 130 },
-    { field: 'product_name', headerName: 'Product Name', width: 130 },
+    { field: 'product_name', headerName: 'Product Name', width: 130 ,
+      renderCell:(params)=>{
+        return(
+          <Link to={`/viewproduct/${params.row.product_id}`}  style={{ textDecoration: "None",color:"black"}}>
+            {params.row.product_name}
+            </Link>
+
+        )
+      }
+
+    },
     {field: 'product_image', headerName: 'Product Image', width: 130 ,
       renderCell:(params)=>{
       return(
@@ -203,6 +215,7 @@ const addproductdialogClose=()=>{
         setAlertseverity('success')
         setAlerts(true)
         await productsapi();
+        
       }
       else{
         console.log("something went wrong")
@@ -262,9 +275,11 @@ const productsapi=async(e)=>{
       setAlertseverity('success')
       setAlerts(true)
       console.log(res)
+
     }
     addproductformreset()
     await productsapi();
+    
     // else{
     //   console.log("something went wrong")
     // }
@@ -314,17 +329,18 @@ const productsapi=async(e)=>{
     productsapi();
     
   },[])
+
+
   return (
     <>
-     
 
       <FinalSideNav icondisplaydata={icondisplay}/>
 
-      {alerts?<Alert severity={alertseverity} onClose={alertclose}>{alertcontent}</Alert>:<></>}
+      {alerts?<Alert severity={alertseverity} onClose={alertclose} variant="filled">{alertcontent}</Alert>:<></>}
         <Grid container spacing={4}>
           
         {menulistitems.map((item,index)=>(
-          <Grid siz={4} key={index}>
+          <Grid size={4} key={index}>
           
             <Card className='totalorderscard' sx={{height:'100px',width:'120px',margin:'45px 0px 0px 45px',}}>
             <CardContent>

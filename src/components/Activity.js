@@ -4,8 +4,11 @@ import Highcharts from "highcharts";
 import HighchartsReact from "highcharts-react-official";
 import Grid from '@mui/material/Grid2';
 import Paper from '@mui/material/Paper';
+import { connect } from 'react-redux';
 
-function Activity() {
+
+
+function Activity(reduxsetusername) {
     const options = {
         chart:{
             type:"column"
@@ -88,10 +91,15 @@ function Activity() {
           },
         ],
       };
-    
+
+  
+    console.log("reduxsetusername",reduxsetusername)
+    const username=reduxsetusername['reduxsetusername']['setusernameReducer']['username']
+    console.log(username)
+    const icondisplay=reduxsetusername['reduxsetusername']['setusernameReducer']['username'].charAt(0).toUpperCase()
   return (
    <>
-   <FinalSideNav />
+   <FinalSideNav icondisplaydata={icondisplay}/>
    {/* <Grid>
    <HighchartsReact highcharts={Highcharts} options={options} />
    </Grid> */}
@@ -121,4 +129,9 @@ function Activity() {
   )
 }
 
-export default Activity
+
+const mapStateToProps=(state)=>({
+  reduxsetusername:state
+})
+
+export default connect(mapStateToProps)(Activity);
