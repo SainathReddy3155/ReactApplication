@@ -40,10 +40,10 @@ function Dashboard(reduxsetusername) {
   // alert(currentUsername)
   // const username="Welcome " + localStorage.getItem('username')
   // console.log(username)
-  console.log(reduxsetusername)
+  // console.log(reduxsetusername)
   const username="Welcome " + reduxsetusername['reduxsetusername']['setusernameReducer']['username']
-  console.log(username)
-  console.log("reduxsetusername :",reduxsetusername['reduxsetusername']['setusernameReducer']['username'])
+  // console.log(username)
+  // console.log("reduxsetusername :",reduxsetusername['reduxsetusername']['setusernameReducer']['username'])
 
   const icondisplay=reduxsetusername['reduxsetusername']['setusernameReducer']['username'].charAt(0).toUpperCase()
 
@@ -331,6 +331,28 @@ const productsapi=async(e)=>{
   },[])
 
 
+  const savechangesformfunction=async(e)=>{
+      e.preventDefault();
+      const formdata= new FormData();
+      formdata.append("product_name",editrowData.product_name);
+      formdata.append('cost',editrowData.cost);
+      formdata.append('rating',editrowData.rating);
+      formdata.append('status',editrowData.status);
+      console.log("editrowData : ",editrowData)
+      const res= await api.patch(`/api/updateproduct/${editrowData.product_id}`,formdata,{
+        headers: { "Content-Type": "multipart/form-data" },
+      })
+      if(res.status===200){
+        console.log("product updated success")
+        await productsapi();
+      }
+      else{
+        console.log("Something went wrong")
+      }
+
+  }
+
+
   return (
     <>
 
@@ -513,6 +535,8 @@ const productsapi=async(e)=>{
 
 
     {/* edit dailog starts here */}
+    <form id="savechangesform" method="POST" onSubmit={savechangesformfunction}>
+    <FormControl>
        <Dialog
         open={editdialog}
         onClose={editdialogClose}
@@ -520,14 +544,14 @@ const productsapi=async(e)=>{
           component: 'form',
           onSubmit: (event) => {
             event.preventDefault();
-            const formData = new FormData(event.currentTarget);
-            const formJson = Object.fromEntries(formData.entries());
-            const email = formJson.email;
-            console.log(email);
+            // const formData = new FormData(event.currentTarget);
+            // const formJson = Object.fromEntries(formData.entries());
+            // alert("form data ",formJson)
             editdialogClose();
           },
         }}
       >
+        
         <DialogTitle>Edit</DialogTitle>
         <DialogContent>
           <DialogContentText>
@@ -540,6 +564,7 @@ const productsapi=async(e)=>{
                 <Button type="submit" variant='contained' sx={{marginTop:2}}>Change Password</Button>
                 </FormControl> */}
           </DialogContentText>
+          
           <TextField
             autoFocus
             required
@@ -609,9 +634,12 @@ const productsapi=async(e)=>{
         </DialogContent>
         <DialogActions>
           <Button onClick={editdialogClose}>Cancel</Button>
-          <Button type="submit">Save Changes</Button>
+          <Button type="submit" >Save Changes</Button>
         </DialogActions>
       </Dialog>
+      </FormControl>
+    </form>
+      
     </>
   )
 }

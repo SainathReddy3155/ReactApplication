@@ -105,7 +105,7 @@ function Activity(reduxsetusername) {
    </Grid> */}
 
    <Grid container spacing={2}>
-   
+        
         <Grid size={4} sx={{mt:3}}>
         <Paper elevation={3} >
         <HighchartsReact highcharts={Highcharts} options={options} />

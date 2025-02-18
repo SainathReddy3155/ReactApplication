@@ -11,7 +11,7 @@ import CardMedia from '@mui/material/CardMedia';
 import Grid from '@mui/material/Grid2';
 import Rating from '@mui/material/Rating';
 import {Link, Navigate, useNavigate} from 'react-router-dom';
-
+import Alert from '@mui/material/Alert';
 function SingleProduct() {
 
   const product_id = useParams();
@@ -19,6 +19,9 @@ function SingleProduct() {
   const [productdata, setProductdata] = useState([]);
   const [productrating,setProductrating]=useState(0);
 
+  const [alerts,setAlerts]=useState(false)
+  const[alertcontent,setAlertcontent]=useState('')
+  const[alertseverity,setAlertseverity]=useState('')
   useEffect(() => {
     console.log("Helloo")
 
@@ -44,9 +47,21 @@ function SingleProduct() {
 
   }, [])
 
+  const addtocart=async()=>{
+    setAlerts(true)
+    setAlertcontent("Succesfully Added to Cart")
+    setAlertseverity("success")
+
+  }
+
+  const alertclose=()=>{
+    setAlerts(false)
+   }
+  
   return (
     <>
       <FinalSideNav />
+      {alerts?<Alert severity={alertseverity} onClose={alertclose} variant="filled">{alertcontent}</Alert>:<></>}
       <Grid container spacing={2}>
         <Grid size={4}>
 
@@ -80,7 +95,7 @@ function SingleProduct() {
             </CardContent>
             <CardActions>
         <Button size="small"><Link to="/dashboard" style={{textDecoration:"None",color:"#1976d2"}}>Back</Link></Button>
-        <Button size="small">Add To Cart</Button>
+        <Button size="small" onClick={addtocart}>Add To Cart</Button>
       </CardActions>
 
           </Card>
