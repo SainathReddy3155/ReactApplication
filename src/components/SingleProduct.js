@@ -68,7 +68,7 @@ function SingleProduct() {
         </Grid>
         <Grid size={4}>
 
-          <Card sx={{ maxWidth: 345, marginTop: 20 }}>
+          <Card sx={{ maxWidth: 345, marginTop: 20, boxShadow:"3px 3px 60px #bebebe, -31px -20px 57px #ffffff"}}>
             <CardMedia component="img"
               height="194"
               image={productdata.product_image}

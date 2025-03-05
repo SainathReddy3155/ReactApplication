@@ -11,6 +11,7 @@ import Settings from './components/Settings.js';
 import Activity from './components/Activity.js';
 import {Link} from 'react-router-dom';
 import SingleProduct from './components/SingleProduct.js';
+import Products from './components/Products.js';
 // import { Provider } from 'react-redux';
 // import store from './store';
 function App() {
@@ -27,6 +28,8 @@ function App() {
       <Route path='/settings' element={<ProctectedRoute><Settings/></ProctectedRoute>}/>
       <Route path='/activity' element={<ProctectedRoute><Activity/></ProctectedRoute>}/>
       <Route path='/viewproduct/:id' element={<ProctectedRoute><SingleProduct/></ProctectedRoute>}/>
+      <Route path='/products' element={<ProctectedRoute><Products/></ProctectedRoute>}/>
+
       
     </Routes>
     </BrowserRouter>

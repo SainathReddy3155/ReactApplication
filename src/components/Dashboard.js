@@ -36,21 +36,15 @@ import Settings from './Settings';
 function Dashboard(reduxsetusername) {
 
   
-  // const currentUsername= useSelector((state)=>console.log("Welcome :  ",state.username))
-  // alert(currentUsername)
-  // const username="Welcome " + localStorage.getItem('username')
-  // console.log(username)
-  // console.log(reduxsetusername)
-  const username="Welcome " + reduxsetusername['reduxsetusername']['setusernameReducer']['username']
-  // console.log(username)
-  // console.log("reduxsetusername :",reduxsetusername['reduxsetusername']['setusernameReducer']['username'])
+  
+  const username=" 👋 Welcome " + reduxsetusername['reduxsetusername']['setusernameReducer']['username']
 
   const icondisplay=reduxsetusername['reduxsetusername']['setusernameReducer']['username'].charAt(0).toUpperCase()
 
   const [userdatarows,setUserDataRows]=useState([])
 
   const columns = [
-    { field: 'id', headerName: 'ID', width: 70 },
+    // { field: 'id', headerName: 'ID', width: 70 },
     { field: 'product_id', headerName: 'Product ID', width: 130 },
     { field: 'product_name', headerName: 'Product Name', width: 130 ,
       renderCell:(params)=>{
@@ -114,7 +108,7 @@ function Dashboard(reduxsetusername) {
 
   
   
-
+  
   const [alerts,setAlerts]=useState(false)
   const[alertcontent,setAlertcontent]=useState('')
   const[alertseverity,setAlertseverity]=useState('')
@@ -150,10 +144,6 @@ function Dashboard(reduxsetusername) {
     setAlerts(false)
    }
   
-
-  // const editdialogOpen=()=>{
-  //   setEditdilog(true)
-  // }
 
   const [preview, setPreview] = useState(null);
 
@@ -232,8 +222,11 @@ const addproductdialogClose=()=>{
 
 const productsapi=async(e)=>{
   try {
-    const res = await api.get('/api/getproducts/');
+  
+    const res = await api.get(`/api/getproducts/`);
+    // console.log("products : ",res.data)
     setUserDataRows(res.data.length > 0 ? res.data : []);
+    // setTotalrowdata(res.data.count)
   } catch (error) {
     console.error("Error fetching products:", error);
   }
@@ -280,34 +273,23 @@ const productsapi=async(e)=>{
     addproductformreset()
     await productsapi();
     
-    // else{
-    //   console.log("something went wrong")
-    // }
   }catch(error){
   console.log(error)
 }
  }
 
-
-
-
-
-
   const userkpiapi=async()=>{
         try{
           const res= await api.get('/api/getuserkpicount/');
-          // console.log(res.data[0])
+          // console.log("userkpi :  ",res.data)
           const resdata=await res.data[0];
-          // console.log(res.data.length)
-          // console.log(res.data[0])
           if(res.data.length>0){
             setKpidata([resdata.orders,resdata.products, resdata.sales])
           }
           else{
             setKpidata([0,0,0])
           }
-          // setKpidata([resdata.orders,resdata.products, resdata.sales])
-
+         
         }
         catch(err){
           console.log(err)
@@ -325,8 +307,9 @@ const productsapi=async(e)=>{
   const titles=['Total No of Orders','Total No of Products','Total No of Sales']
   useEffect(()=>{
     document.title='Dashboard'
-    userkpiapi();
+    // userkpiapi();
     productsapi();
+    userkpiapi();
     
   },[])
 
@@ -343,7 +326,10 @@ const productsapi=async(e)=>{
         headers: { "Content-Type": "multipart/form-data" },
       })
       if(res.status===200){
-        console.log("product updated success")
+        // console.log("product updated success")
+        setAlertcontent("Product updated Successfully")
+        setAlertseverity('success')
+        setAlerts(true)
         await productsapi();
       }
       else{
@@ -374,10 +360,7 @@ const productsapi=async(e)=>{
               </Tooltip>
               </div>
                 <h6 className='torderskpicount'>{Kpicounts.length>index?Kpicounts[index]:<CircularProgress />}</h6>
-                {/* <h6 className='torderskpicount'>{Kpicounts.length>index?Kpicounts[index]: <Skeleton variant="rectangular" width={210} height={60} />}</h6> */}
-
-                {/* <h6 className='torderskpicount'><CircularProgress /></h6> */}
-              {/* <h6 className='torderskpicount'>67</h6> */}
+                
             </CardContent>
           </Card>
             
@@ -398,7 +381,7 @@ const productsapi=async(e)=>{
 
     
         </Grid>
-        <Grid container spacing={8}>
+        <Grid container spacing={8} style={{margin:"10px"}}>
         <Grid size={8}></Grid>
         <Grid size={4}>
         <Button variant='contained' onClick={addproductdialogOpen}>Add Product</Button>
@@ -410,12 +393,12 @@ const productsapi=async(e)=>{
         <Paper sx={{ mt: 9, width:900,ml:35,justifyContent:'center',alignItems:'center'}}>
         <Grid container spacing={4} >
         <DataGrid
-        rows={userdatarows}
-        columns={columns}
-        initialState={{ pagination: { paginationModel } }}
-        pageSizeOptions={[5, 10]}
-        // checkboxSelection
-        sx={{ border: 0 }}
+         rows={userdatarows}
+         columns={columns}
+         initialState={{ pagination: { paginationModel } }}
+         pageSizeOptions={[5, 10]}
+         // checkboxSelection
+         sx={{ border: 0 }}
       />
        </Grid>
        </Paper>
@@ -428,10 +411,6 @@ const productsapi=async(e)=>{
           component: 'form',
           onSubmit: (event) => {
             event.preventDefault();
-            // const formData = new FormData(event.currentTarget);
-            // const formJson = Object.fromEntries(formData.entries());
-            // const email = formJson.email;
-            // console.log(email);
             addproductdialogClose();
           },
         }}
@@ -440,14 +419,6 @@ const productsapi=async(e)=>{
         
         <DialogContent>
           <DialogContentText>
-          {/* <FormControl>
-                <TextField type={showpassword?"text":"password"} name="old_password" id='standard-basic_username'  variant="standard" label='Old Password'  sx={{marginTop:2, width:280}}  value={changepassword.old_password} onChange={onChangepassword}> </TextField>
-                <TextField type={showpassword?"text":"password"} name="new_password" id='standard-basic_password' variant="standard" label='New Password' sx={{marginTop:2}}  value={changepassword.new_password} onChange={onChangepassword}></TextField>
-                <TextField type={showpassword?"text":"password"} name="confirm_password" id='standard-basic_cpassword' variant="standard" label='Confirm Password' sx={{marginTop:2}}  value={changepassword.confirm_password} onChange={onChangepassword}></TextField>
-                
-              
-                <Button type="submit" variant='contained' sx={{marginTop:2}}>Change Password</Button>
-                </FormControl> */}
           </DialogContentText>
           
           <TextField
@@ -514,13 +485,7 @@ const productsapi=async(e)=>{
             onChange={onhandleChangeImage}
             />
 
-            {/* <label htmlFor="product-image">
-            <Button variant="contained" component="span" color="primary" style={{ marginTop: "10px" }}>
-            Choose Image
-            </Button>
-            </label> */}
-
-            {/* Image ending */}
+          
 
         </DialogContent>
         <DialogActions>
@@ -544,9 +509,6 @@ const productsapi=async(e)=>{
           component: 'form',
           onSubmit: (event) => {
             event.preventDefault();
-            // const formData = new FormData(event.currentTarget);
-            // const formJson = Object.fromEntries(formData.entries());
-            // alert("form data ",formJson)
             editdialogClose();
           },
         }}
@@ -555,14 +517,7 @@ const productsapi=async(e)=>{
         <DialogTitle>Edit</DialogTitle>
         <DialogContent>
           <DialogContentText>
-          {/* <FormControl>
-                <TextField type={showpassword?"text":"password"} name="old_password" id='standard-basic_username'  variant="standard" label='Old Password'  sx={{marginTop:2, width:280}}  value={changepassword.old_password} onChange={onChangepassword}> </TextField>
-                <TextField type={showpassword?"text":"password"} name="new_password" id='standard-basic_password' variant="standard" label='New Password' sx={{marginTop:2}}  value={changepassword.new_password} onChange={onChangepassword}></TextField>
-                <TextField type={showpassword?"text":"password"} name="confirm_password" id='standard-basic_cpassword' variant="standard" label='Confirm Password' sx={{marginTop:2}}  value={changepassword.confirm_password} onChange={onChangepassword}></TextField>
-                
-              
-                <Button type="submit" variant='contained' sx={{marginTop:2}}>Change Password</Button>
-                </FormControl> */}
+         
           </DialogContentText>
           
           <TextField

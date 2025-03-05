@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import { AppBar, Toolbar, Grid, Rating, IconButton, Button, Badge, Avatar, TextField, Autocomplete, Card, CardActions, Typography, CardContent, CardMedia, Accordion, AccordionDetails, AccordionSummary, Alert, Snackbar, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, Drawer, Box, Menu, MenuItem, List, ListItem, ListItemButton, ListItemIcon, ListItemText, Collapse } from '@mui/material'
 import MenuIcon from '@mui/icons-material/Menu';
 import SettingsIcon from '@mui/icons-material/Settings';
@@ -19,10 +19,13 @@ import PowerSettingsNewOutlinedIcon from '@mui/icons-material/PowerSettingsNewOu
 import { useNavigate } from 'react-router-dom';
 import { Link } from 'react-router-dom';
 import ShoppingCartIcon from '@mui/icons-material/ShoppingCart';
+import ShoppingBagIcon from '@mui/icons-material/ShoppingBag';
+import axios from 'axios';
 
 function FinalSideNav({ icondisplaydata }) {
   const [isdraweropen, setIsdraweropen] = useState(false)
   const [collapseopen, setIscollapseopen] = useState(false)
+  const [search,setSearch]=useState("")
   const handlecollapsemenu = () => {
     setIscollapseopen(!collapseopen)
   }
@@ -34,6 +37,20 @@ function FinalSideNav({ icondisplaydata }) {
   }
 
   const navigate = useNavigate();
+
+  const changesearch =(e)=>{
+      let text=e.target.value
+      console.log("text : ",text)
+      setSearch(text)
+    // const res= await axios.get("https://fakestoreapi.com/products")
+    // console.log("res",res)
+
+  }
+  useEffect(()=>{
+    const res= axios.get("https://fakestoreapi.com/products")
+    console.log("res",res)
+  },[search])
+  
   return (
     <>
 
@@ -55,7 +72,7 @@ function FinalSideNav({ icondisplaydata }) {
                             </Badge>    
                         </IconButton>   */}
 
-          <TextField id="standard-basic" label="Search Items..." variant="standard" sx={{ width: '500px', }} />
+          <TextField id="standard-basic" label="Search Items..." variant="standard" sx={{ width: '500px', }} onChange={changesearch}/>
           <div className='cart_profile_sec'>
             <IconButton>
               <Badge badgeContent={9} color="primary" >
@@ -115,6 +132,18 @@ function FinalSideNav({ icondisplaydata }) {
                   </ListItemButton>
                 </Link>
               </Collapse>
+              <Link to='/products' className='navtablinks'>
+                <ListItem onClick={() => { setIsdraweropen(false); }}>
+                  <ListItemButton>
+                    <ListItemIcon>
+                      <ShoppingBagIcon />
+                    </ListItemIcon>
+                    <ListItemText primary="Products" />
+                  </ListItemButton>
+
+                </ListItem>
+              </Link>
+
               <Link to='/settings' className='navtablinks'>
                 <ListItem onClick={() => { setIsdraweropen(false); }}>
                   <ListItemButton>
