@@ -19,6 +19,10 @@ const persistedReducer=persistReducer(persistConfig,rootReducers)
 
 const store= configureStore({
     reducer:persistedReducer,
+    middleware: (getDefaultMiddleware) =>
+        getDefaultMiddleware({
+          serializableCheck: false, // Disable the check (not recommended)
+        }),
 });
 
 const persistor=persistStore(store);

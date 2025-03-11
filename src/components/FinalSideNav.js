@@ -47,8 +47,18 @@ function FinalSideNav({ icondisplaydata }) {
 
   }
   useEffect(()=>{
-    const res= axios.get("https://fakestoreapi.com/products")
-    console.log("res",res)
+    // debouncing implementation
+
+    const timeout= setTimeout(()=>{
+      const res= axios.get("https://fakestoreapi.com/products")
+        console.log("search : ",search)
+        console.log("res : ",res)
+    },1000)
+
+    return ()=>{
+        clearTimeout(timeout)
+    }
+
   },[search])
   
   return (
@@ -57,8 +67,8 @@ function FinalSideNav({ icondisplaydata }) {
       <AppBar position='static' sx={{ backgroundColor: "white" }}>
         <Toolbar sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
 
-          <IconButton>
-            <MenuIcon onClick={() => setIsdraweropen(true)} />
+          <IconButton onClick={() => setIsdraweropen(true)}>
+            <MenuIcon  />
           </IconButton>
 
           {/* <h6>Sainath</h6> */}
@@ -94,9 +104,9 @@ function FinalSideNav({ icondisplaydata }) {
         <Box p={2} textAlign="center" width="250px">
 
           <Typography variant='h6'>
-            <img src='https://www.logogenie.net/images/articles/starbucks-logo1.jpg' width='260px' height='90px' alt='loding...' />
-            <IconButton>
-              <ChevronLeftIcon onClick={() => setIsdraweropen(false)} />
+            <img src='https://safetydashboard.com/wp-content/uploads/2024/01/SafetyDashboard-Logo-2024.png' width='245px' height='90px' alt='loding...' />
+            <IconButton onClick={() => setIsdraweropen(false)}>
+              <ChevronLeftIcon  />
             </IconButton>
           </Typography>
 

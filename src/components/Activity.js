@@ -93,9 +93,9 @@ function Activity(reduxsetusername) {
       };
 
   
-    console.log("reduxsetusername",reduxsetusername)
+    // console.log("reduxsetusername",reduxsetusername)
     const username=reduxsetusername['reduxsetusername']['setusernameReducer']['username']
-    console.log(username)
+    // console.log(username)
     const icondisplay=reduxsetusername['reduxsetusername']['setusernameReducer']['username'].charAt(0).toUpperCase()
   return (
    <>
@@ -105,7 +105,7 @@ function Activity(reduxsetusername) {
    </Grid> */}
 
    <Grid container spacing={2}>
-        
+
         <Grid size={4} sx={{mt:3}}>
         <Paper elevation={3} >
         <HighchartsReact highcharts={Highcharts} options={options} />

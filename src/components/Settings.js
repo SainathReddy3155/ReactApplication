@@ -34,7 +34,8 @@ import Switch from '@mui/material/Switch';
 import FormControlLabel from '@mui/material/FormControlLabel';
 import FormControl from '@mui/material/FormControl';
 import { connect } from 'react-redux';
-
+import api from '../api';
+import { Co2Sharp } from '@mui/icons-material';
 
 
 
@@ -42,6 +43,12 @@ function Settings(reduxsetusername) {
     useEffect(()=>{
         document.title='Settings'
     },[])
+
+    const navigate=useNavigate()
+    const logout=async(e)=>{
+        localStorage.clear()
+        navigate('/login')
+    }
 
     const username=reduxsetusername['reduxsetusername']['setusernameReducer']['username']
     const icondisplay=reduxsetusername['reduxsetusername']['setusernameReducer']['username'].charAt(0).toUpperCase()
@@ -98,11 +105,29 @@ function Settings(reduxsetusername) {
             return false
         }
         else{
-            console.log(changepassword)
-            setAlerts(true)
-            setAlertcontent("Password Updated Successfully")
-            setAlertseverity("success")
-            resetForm();
+            try{
+            const res=await api.put('/api/updatepassword/',{
+                "old_password":changepassword.old_password,
+                "new_password":changepassword.new_password
+            })
+            if (res.status===200){
+                setAlerts(true)
+                setAlertcontent("Password Updated Successfully.You will be redirected to login page in 5 seconds")
+                setAlertseverity("success")
+                resetForm();
+                setTimeout(()=>{
+                    logout()
+                },5000)
+                
+            }
+        }catch(error){
+                console.log(error.response.data['old_password'][0])
+                setAlerts(true)
+                setAlertcontent(error.response.data['old_password'][0])
+                setAlertseverity("error")
+                resetForm();
+        }
+            
 
         }
     }
